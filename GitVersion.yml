@@ -1,0 +1,54 @@
+next-version: 1.0
+
+assembly-versioning-scheme: MajorMinorPatch
+assembly-file-versioning-scheme: MajorMinorPatchTag
+assembly-informational-format: '{InformationalVersion}'
+
+commit-message-incrementing: Enabled
+major-version-bump-message: '\+semver:\s?(breaking|major)'
+minor-version-bump-message: '\+semver:\s?(feature|minor)'
+patch-version-bump-message: '\+semver:\s?(fix|patch)'
+no-bump-message: '\+semver:\s?(none|skip)'
+
+mode: ContinuousDelivery
+continuous-delivery-fallback-tag: ci
+tag-prefix: '[vV]'
+increment: Inherit
+
+branches:
+  main:
+    regex: ^main|master$
+    tag: rc
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    source-branches: []
+  develop:
+    regex: ^dev(elop)?(ment)?$
+    mode: ContinuousDeployment
+    tag: unstable
+    increment: Minor
+    track-merge-target: true
+    tracks-release-branches: true
+  release:
+    regex: ^releases?[/-]
+    tag: beta
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    is-release-branch: true
+  feature:
+    regex: ^(feat(ures?)?|ft)[/-]
+    tag: alpha
+    increment: Inherit
+  hotfix:
+    regex: ^(hotfix(es)?|hf)[/-]
+    tag: beta
+    increment: Patch
+  support:
+    regex: ^support[/-]
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+  pull-request:
+    regex: ^(pull\-requests?|pr)[/-]
+    tag: useBranchName
+    tag-number-pattern: '[/-](?<number>\d+)[-/]'
